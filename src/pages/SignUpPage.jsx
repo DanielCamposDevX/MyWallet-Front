@@ -18,7 +18,7 @@ export default function SignUpPage() {
         email: email,
         password: pass
       })
-      promisse.then(() => { navigate("/"); })
+      promisse.then(() => {  })
         .catch(res => { alert(res) })
     }
     else {
