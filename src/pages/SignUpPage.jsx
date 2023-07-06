@@ -19,7 +19,7 @@ export default function SignUpPage() {
         password: pass
       })
       promisse.then(() => {  })
-        .catch(res => { alert(res) })
+        .catch(res => { alert(res.message) })
     }
     else {
       alert('As senhas devem ser iguais!')

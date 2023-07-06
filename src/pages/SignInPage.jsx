@@ -30,7 +30,7 @@ export default function SignInPage() {
     promise
       .then((token) => {
         setRequest({ email, pass, token });
-        localStorage.setItem("user", { email, pass });
+        localStorage.setItem("user", { email, password:pass });
         navigate("/home");
       })
       .catch((error) => {
