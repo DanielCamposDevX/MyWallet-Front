@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import MyWalletLogo from "../components/MyWalletLogo"
 import axios from "axios"
@@ -8,6 +8,7 @@ export default function SignUpPage() {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
   const [cpass, setCpass] = useState('');
+  const navigate = useNavigate();
 
   function sgnup() {
     if (pass == cpass) {
@@ -16,8 +17,8 @@ export default function SignUpPage() {
         email: email,
         password: pass
       })
-      .then(res => {})/// ir para inicio ///
-      .catch(res => {alert(res)})
+      promisse.then(res => { navigate("/") })
+        .catch(res => { alert(res) })
     }
     else {
       alert('As senhas devem ser iguais!')
@@ -25,17 +26,17 @@ export default function SignUpPage() {
   }
   return (
     <SingUpContainer>
-      <form>
+      <form onSubmit={sgnup}>
         <MyWalletLogo />
 
-        <input placeholder="Nome" type="text" required />
-        <input placeholder="E-mail" type="email" required />
-        <input placeholder="Senha" type="password" autocomplete="new-password" required />
-        <input placeholder="Confirme a senha" type="password" autocomplete="new-password" required />
-        <button>Cadastrar</button>
+        <input placeholder="Nome" type="text" required value={name} onChange={(e) => setName(e.target.value)} />
+        <input placeholder="E-mail" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input placeholder="Senha" type="password" autocomplete="new-password" required value={pass} onChange={(e) => setPass(e.target.value)} />
+        <input placeholder="Confirme a senha" type="password" autocomplete="new-password" required value={cpass} onChange={(e) => setCpass(e.target.value)} />
+        <button type="submit">Cadastrar</button>
       </form>
 
-      <Link>
+      <Link to="/">
         Já tem uma conta? Entre agora!
       </Link>
     </SingUpContainer>
