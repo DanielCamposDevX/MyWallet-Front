@@ -13,7 +13,7 @@ export default function SignUpPage() {
 
   function sgnup() {
     if (pass == cpass) {
-      const promisse = axios.post(`${process.env.REACT_APP_API_URL}/signup`, {
+      const promisse = axios.post(`${import.meta.env.VITE_API_URL}/signup`, {
         name: name,
         email: email,
         password: pass
