@@ -11,15 +11,17 @@ export default function SignUpPage() {
   const [cpass, setCpass] = useState('');
   const navigate = useNavigate();
 
-  function sgnup() {
+  function sgnup(event) {
     if (pass == cpass) {
+      event.preventDefault();
       const promisse = axios.post(`${import.meta.env.VITE_API_URL}/signup`, {
         name: name,
         email: email,
         password: pass
-      })
-      promisse.then(() => {  })
-        .catch(res => { alert(res.message) })
+      });
+      promisse.then(() => { console.log(promisse) })
+      promisse.catch(() => { console.log(promisse) })
+      navigate("/");
     }
     else {
       alert('As senhas devem ser iguais!')
@@ -32,8 +34,8 @@ export default function SignUpPage() {
 
         <input placeholder="Nome" type="text" required value={name} onChange={(e) => setName(e.target.value)} />
         <input placeholder="E-mail" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input placeholder="Senha" type="password"  required value={pass} onChange={(e) => setPass(e.target.value)} />
-        <input placeholder="Confirme a senha" type="password"  required value={cpass} onChange={(e) => setCpass(e.target.value)} />
+        <input placeholder="Senha" type="password" required value={pass} onChange={(e) => setPass(e.target.value)} />
+        <input placeholder="Confirme a senha" type="password" required value={cpass} onChange={(e) => setCpass(e.target.value)} />
         <button type="submit">Cadastrar</button>
       </form>
 

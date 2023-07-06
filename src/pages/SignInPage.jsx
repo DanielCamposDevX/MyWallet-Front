@@ -19,10 +19,11 @@ export default function SignInPage() {
         setRequest({ email, pass, token });
         navigate("/home");
       })
-      .catch((error) => { });
+      .catch((error) => {console.log("Sem user logado") });
   }, []);
 
-  function login() {
+  function login(event) {
+    event.preventDefault();
     const promise = axios.post(`${import.meta.env.VITE_API_URL}/signin`, {
       email: email,
       password: pass,
