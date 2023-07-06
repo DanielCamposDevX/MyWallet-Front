@@ -10,7 +10,7 @@ export default function SignUpPage() {
   const [cpass, setCpass] = useState('');
 
   function sgnup() {
-    if (pass = cpass) {
+    if (pass == cpass) {
       const promisse = axios.post(`${process.env.REACT_APP_API_URL}/signup`, {
         name: name,
         email: email,
