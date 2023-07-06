@@ -18,7 +18,7 @@ export default function SignUpPage() {
         email: email,
         password: pass
       })
-      promisse.then(res => { navigate("/") })
+      promisse.then(() => { navigate("/"); })
         .catch(res => { alert(res) })
     }
     else {
@@ -32,8 +32,8 @@ export default function SignUpPage() {
 
         <input placeholder="Nome" type="text" required value={name} onChange={(e) => setName(e.target.value)} />
         <input placeholder="E-mail" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input placeholder="Senha" type="password" autocomplete="new-password" required value={pass} onChange={(e) => setPass(e.target.value)} />
-        <input placeholder="Confirme a senha" type="password" autocomplete="new-password" required value={cpass} onChange={(e) => setCpass(e.target.value)} />
+        <input placeholder="Senha" type="password"  required value={pass} onChange={(e) => setPass(e.target.value)} />
+        <input placeholder="Confirme a senha" type="password"  required value={cpass} onChange={(e) => setCpass(e.target.value)} />
         <button type="submit">Cadastrar</button>
       </form>
 

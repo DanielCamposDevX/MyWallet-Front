@@ -19,7 +19,7 @@ export default function SignInPage() {
         setRequest({ email, pass, token });
         navigate("/home");
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }, []);
 
   function login() {
