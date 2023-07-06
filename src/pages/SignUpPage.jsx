@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import MyWalletLogo from "../components/MyWalletLogo"
 import axios from "axios"
+import { useState } from "react"
 
 export default function SignUpPage() {
   const [name, setName] = useState('');
