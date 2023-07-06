@@ -1,49 +1,74 @@
-import styled from "styled-components"
-import { Link } from "react-router-dom"
-import MyWalletLogo from "../components/MyWalletLogo"
-import { useState, useEffect, useContext } from "react"
-import axios from "axios"
-import { RequestContext } from "../context/RequestContext"
-
-
+import styled from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
+import MyWalletLogo from "../components/MyWalletLogo";
+import { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { RequestContext } from "../context/RequestContext";
 
 export default function SignInPage() {
-  const [email, setEmail] = useState('');
-  const [pass, setPass] = useState('');
-  const { request, setRequest } = useContext(RequestContext);
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const { setRequest } = useContext(RequestContext);
+  const userdata = localStorage.getItem("user");
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    const promise = axios.post(`${import.meta.env.VITE_API_URL}/signin`, userdata);
+    promise
+      .then((token) => {
+        setRequest({ email, pass, token });
+        navigate("/home");
+      })
+      .catch((error) => {});
+  }, []);
 
   function login() {
-    () => {
-      const promisse = axios.post(`${import.meta.env.VITE_API_URL}/signin`, {
-        email: email,
-        password: pass
+    const promise = axios.post(`${import.meta.env.VITE_API_URL}/signin`, {
+      email: email,
+      password: pass,
+    });
+    promise
+      .then((token) => {
+        setRequest({ email, pass, token });
+        localStorage.setItem("user", { email, pass });
+        navigate("/home");
+      })
+      .catch((error) => {
+        alert(error);
       });
-      promisse.then((token) => { console.log(token) });//Utilizar ContextAPI, e go to home//
-      promisse.catch((error) => { alert(error) });// Colocar erro// 
-    }
   }
 
   return (
-    <SingInContainer>
-      <form onSubmit={login()}>
+    <SignInContainer>
+      <form onSubmit={login}>
         <MyWalletLogo />
-        <input placeholder="E-mail" type="email" required value={email} onChange={e => setEmail(e.target.value)} />
-        <input placeholder="Senha" type="password" autocomplete="new-password" required value={pass} onChange={e => setPass(e.target.value)} />
+        <input
+          placeholder="E-mail"
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          placeholder="Senha"
+          type="password"
+          autoComplete="new-password"
+          required
+          value={pass}
+          onChange={(e) => setPass(e.target.value)}
+        />
         <button type="submit">Entrar</button>
       </form>
 
-      <Link>
-        Primeira vez? Cadastre-se!
-      </Link>
-    </SingInContainer>
-  )
+      <Link to="/cadastro">Primeira vez? Cadastre-se!</Link>
+    </SignInContainer>
+  );
 }
 
-const SingInContainer = styled.section`
+const SignInContainer = styled.section`
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`
+`;

@@ -5,30 +5,37 @@ import axios from "axios";
 export const RequestContext = createContext()
 
 export const RequestProvider = ({ children }) => {
-    const [request, setRequest] = useState();
+    const [request, setRequest] = useState({});
 
 
     useEffect(() => {
-        if (request.length != 0) {
+        if (request.email && request.pass) {
             const config = {
                 headers: {
                     "Authorization": `Bearer ${request.token}`
                 }
             };
             const promisse = axios.post(`${import.meta.env.VITE_API_URL}/signin`, {
-                email: email,
-                password: pass
+                email: request.email,
+                password: request.pass
             });
-            promisse.then((token) => { console.log(token) });//Utilizar ContextAPI, e go to home//
-            promisse.catch((error) => { alert(error) });// Colocar erro// 
-        };
+            promisse
+                .then((token) => {
+                    setRequest((prevRequest) => ({
+                        ...prevRequest,
+                        token,
+                    }));
+                })
+                .catch((error) => {
+                    alert(error);
+                });
 
-}, [request]);
+        }}, [request]);
 
 
-return (
-    <RequestContext.Provider value={{ request, setRequest}}>
-        {children}
-    </RequestContext.Provider>
-)
+    return (
+        <RequestContext.Provider value={{ request, setRequest }}>
+            {children}
+        </RequestContext.Provider>
+    )
 }
