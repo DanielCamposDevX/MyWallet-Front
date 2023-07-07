@@ -16,7 +16,7 @@ export default function HomePage() {
     <HomeContainer>
       <Header>
         <h1>Olá, Fulano</h1>
-        <BiExit onClick={exit} />
+        <BiExit onClick={exit} data-test="logout" />
       </Header>
 
       <TransactionsContainer>

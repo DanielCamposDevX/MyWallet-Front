@@ -60,6 +60,7 @@ export default function SignInPage() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          data-test="email"
         />
         <input
           placeholder="Senha"
@@ -68,8 +69,9 @@ export default function SignInPage() {
           required
           value={pass}
           onChange={(e) => setPass(e.target.value)}
+          data-test="password"
         />
-        <button type="submit">Entrar</button>
+        <button type="submit" data-test="sign-in-submit">Entrar</button>
       </form>
 
       <Link to="/cadastro">Primeira vez? Cadastre-se!</Link>
