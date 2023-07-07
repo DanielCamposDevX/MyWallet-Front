@@ -11,6 +11,12 @@ export default function HomePage() {
     localStorage.removeItem("user");
     localStorage.removeItem("passc");
     navigate("/");
+    const config ={
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }
+    app.post(`${import.meta.env.VITE_API_URL}/logoff`, config)
   }
   return (
     <HomeContainer>
