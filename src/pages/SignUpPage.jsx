@@ -19,9 +19,9 @@ export default function SignUpPage() {
         email: email,
         password: pass
       });
-      promisse.then(() => { console.log(promisse) })
-      promisse.catch(() => { console.log(promisse) })
-      navigate("/");
+      promisse.then(() => { navigate("/"); });
+      promisse.catch((res) => { alert(res) });
+      
     }
     else {
       alert('As senhas devem ser iguais!')

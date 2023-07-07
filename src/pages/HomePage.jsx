@@ -1,13 +1,22 @@
 import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
+
+  const navigate = useNavigate();
+
+  function exit() {
+    localStorage.removeItem("user");
+    localStorage.removeItem("passc");
+    navigate("/");
+  }
   return (
     <HomeContainer>
       <Header>
         <h1>Olá, Fulano</h1>
-        <BiExit />
+        <BiExit onClick={exit} />
       </Header>
 
       <TransactionsContainer>

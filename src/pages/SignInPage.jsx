@@ -9,17 +9,26 @@ export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const { setRequest } = useContext(RequestContext);
-  const userdata = localStorage.getItem("user");
   const navigate = useNavigate();
 
   useEffect(() => {
-    const promise = axios.post(`${import.meta.env.VITE_API_URL}/signin`, userdata);
-    promise
-      .then((token) => {
-        setRequest({ email, pass, token });
-        navigate("/home");
-      })
-      .catch((error) => {console.log("Sem user logado") });
+    const storedUser = localStorage.getItem("user");
+    const storedPass = localStorage.getItem("passc");
+
+    if (storedUser && storedPass) {
+      const promise = axios.post(`${import.meta.env.VITE_API_URL}/signin`, {
+        email: storedUser,
+        password: storedPass,
+      });
+      promise
+        .then((token) => {
+          setRequest({ email: storedUser, pass: storedPass, token });
+          navigate("/home");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }, []);
 
   function login(event) {
@@ -31,7 +40,9 @@ export default function SignInPage() {
     promise
       .then((token) => {
         setRequest({ email, pass, token });
-        localStorage.setItem("user", { email, password:pass });
+        localStorage.setItem("user", email);
+        localStorage.setItem("passc", pass);
+        console.log(promise)
         navigate("/home");
       })
       .catch((error) => {
