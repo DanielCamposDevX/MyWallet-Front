@@ -8,7 +8,7 @@ import { RequestContext } from "../context/RequestContext";
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
-  const { setRequest } = useContext(RequestContext);
+  const { request, setRequest } = useContext(RequestContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,23 +31,24 @@ export default function SignInPage() {
     }
   }, []);
 
-  function login(event) {
+  async function login(event) {
     event.preventDefault();
-    const promise = axios.post(`${import.meta.env.VITE_API_URL}/signin`, {
-      email: email,
-      password: pass,
-    });
-    promise
-      .then((token) => {
-        setRequest({ email, pass, token });
-        localStorage.setItem("user", email);
-        localStorage.setItem("passc", pass);
-        console.log(promise)
-        navigate("/home");
-      })
-      .catch((error) => {
-        alert(error);
-      });
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/signin`,
+        {
+          email: email,
+          password: pass,
+        }
+      );
+      const token = response.data;
+      setRequest({ token });
+      localStorage.setItem("user", email);
+      localStorage.setItem("passc", pass);
+      navigate("/home");
+    } catch (error) {
+      alert(error);
+    }
   }
 
   return (

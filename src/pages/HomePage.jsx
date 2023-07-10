@@ -2,21 +2,36 @@ import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
 import { useNavigate } from "react-router-dom";
+import { RequestContext } from "../context/RequestContext";
+import { useEffect, useState, useContext } from "react";
+import axios from "axios";
 
 export default function HomePage() {
-
+  const { request } = useContext(RequestContext);
   const navigate = useNavigate();
+  const [transac, setTransac] = useState([]);
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        "authorization": `Bearer ${request.token}`
+      }
+    }
+    const response = axios.get(`${import.meta.env.VITE_API_URL}/transactions`, config)
+    response.then(() => { console.log(response) })
+    response.catch(() => { alert(error) })
+  }, []);
 
   function exit() {
     localStorage.removeItem("user");
     localStorage.removeItem("passc");
     navigate("/");
-    const config ={
+    const config = {
       headers: {
-        "Authorization": `Bearer ${token}`
+        "authorization": `Bearer ${request.token}`
       }
     }
-    app.post(`${import.meta.env.VITE_API_URL}/logoff`, config)
+    axios.post(`${import.meta.env.VITE_API_URL}/logoff`, {},config)
   }
   return (
     <HomeContainer>
@@ -27,21 +42,15 @@ export default function HomePage() {
 
       <TransactionsContainer>
         <ul>
-          <ListItemContainer>
-            <div>
-              <span>30/11</span>
-              <strong>Almoço mãe</strong>
-            </div>
-            <Value color={"negativo"}>120,00</Value>
-          </ListItemContainer>
-
-          <ListItemContainer>
-            <div>
-              <span>15/11</span>
-              <strong>Salário</strong>
-            </div>
-            <Value color={"positivo"}>3000,00</Value>
-          </ListItemContainer>
+          {transac && transac.map((data) => (
+            <ListItemContainer>
+              <div>
+                <span>{data.date}</span>
+                <strong>{data.description}</strong>
+              </div>
+              <Value color={data.type}>{data.value}</Value>
+            </ListItemContainer>
+          ))}
         </ul>
 
         <article>
@@ -49,7 +58,6 @@ export default function HomePage() {
           <Value color={"positivo"}>2880,00</Value>
         </article>
       </TransactionsContainer>
-
 
       <ButtonsContainer>
         <button>
@@ -120,7 +128,7 @@ const ButtonsContainer = styled.section`
 const Value = styled.div`
   font-size: 16px;
   text-align: right;
-  color: ${(props) => (props.color === "positivo" ? "green" : "red")};
+  color: ${(props) => (props.color === "in" ? "green" : "red")};
 `
 const ListItemContainer = styled.li`
   display: flex;
