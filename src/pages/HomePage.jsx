@@ -107,11 +107,11 @@ export default function HomePage() {
       </TransactionsContainer>
 
       <ButtonsContainer>
-        <button onClick={() => handleClick("in")} data-test="new-income">
+        <button onClick={() => handleClick("entrada")} data-test="new-income">
           <AiOutlinePlusCircle />
           <p>Nova <br /> entrada</p>
         </button>
-        <button onClick={() => handleClick("out")} data-test="new-expense">
+        <button onClick={() => handleClick("saida")} data-test="new-expense">
           <AiOutlineMinusCircle />
           <p>Nova <br />saída</p>
         </button>
@@ -175,7 +175,7 @@ const ButtonsContainer = styled.section`
 const Value = styled.div`
   font-size: 16px;
   text-align: right;
-  color: ${(props) => (props.color === "in" ? "green" : "red")};
+  color: ${(props) => (props.color === "entrada" ? "green" : "red")};
 `
 const ListItemContainer = styled.li`
   display: flex;
