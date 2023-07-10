@@ -48,7 +48,7 @@ export default function TransactionsPage() {
     console.log(data);
     const promisse = axios.post(`${import.meta.env.VITE_API_URL}/transactions`, data, config);
     promisse.then(() => { navigate("/home") });
-    promisse.catch((res) => { alert(error) });
+    promisse.catch((res) => { alert(res) });
 
   }
 
@@ -56,7 +56,7 @@ export default function TransactionsPage() {
     <TransactionsContainer>
       <h1>Nova TRANSAÇÃO</h1>
       <form onSubmit={saveTransaction}>
-        <input placeholder="Valor" type="text" required value={value} onChange={(e) => setValue(e.target.value)} data-test="registry-amount-input"/>
+        <input placeholder="Valor" type="text" required value={value} onChange={(e) => setValue(e.target.value)} data-test="registry-amount-input" />
         <input placeholder="Descrição" type="text" required value={description} onChange={(e) => setDescription(e.target.value)} data-test="registry-name-input" />
         <button type="submit" data-test="registry-save">Salvar TRANSAÇÃO</button>
       </form>
