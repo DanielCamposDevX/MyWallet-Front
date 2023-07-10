@@ -21,7 +21,7 @@ export default function SignInPage() {
         password: storedPass,
       });
       promise
-        .then((response) => { 
+        .then((response) => {
           const token = response.data;
           setRequest({ token });
           navigate("/home");
@@ -42,10 +42,12 @@ export default function SignInPage() {
           password: pass,
         }
       );
-      const token = response.data;
+      const token = response.data.token;
       setRequest({ token });
+      const username = response.data.name
       localStorage.setItem("user", email);
       localStorage.setItem("passc", pass);
+      localStorage.setItem("name", username);
       navigate("/home");
     } catch (error) {
       alert(error);

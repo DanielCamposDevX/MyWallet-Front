@@ -11,7 +11,8 @@ export default function HomePage() {
   const navigate = useNavigate();
   const [transac, setTransac] = useState([]);
   const [saldo, setSaldo] = useState(0);
-
+  const name = localStorage.getItem("name");
+  ///Verify login or login again///
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const storedPass = localStorage.getItem("passc");
@@ -30,13 +31,12 @@ export default function HomePage() {
           navigate("/")
         });
     }
+    else{
+      navigate("/");
+    }
   }, []);
 
-  function handleClick(tipo) {
-    navigate(`/nova-transacao/${tipo}`);
-  }
-
-
+/// Transactions total calculate ///
   useEffect(() => {
     const config = {
       headers: {
@@ -58,11 +58,11 @@ export default function HomePage() {
       const total = valores.reduce((acc, curr) => acc + curr, 0);
       setSaldo(total);
     });
-    response.catch(() => { alert(error) })
+    response.catch((error) => { alert(error) })
 
   }, []);
 
-
+/// Logoff function ///
   function exit() {
     localStorage.removeItem("user");
     localStorage.removeItem("passc");
@@ -74,38 +74,44 @@ export default function HomePage() {
     }
     axios.post(`${import.meta.env.VITE_API_URL}/logoff`, {}, config)
   }
+
+/// New transaction Function ///
+  function handleClick(tipo) {
+    navigate(`/nova-transacao/${tipo}`);
+  }
+
   return (
     <HomeContainer>
       <Header>
-        <h1>Olá, Fulano</h1>
+        <h1 data-test="user-name">Olá, {name}</h1>
         <BiExit onClick={exit} data-test="logout" />
       </Header>
 
       <TransactionsContainer>
         <ul>
-          {transac && transac.map((data) => (
-            <ListItemContainer>
+          {transac && transac.map((data,index) => (
+            <ListItemContainer key = {index}>
               <div>
                 <span>{data.date}</span>
-                <strong>{data.data.description}</strong>
+                <strong data-test="registry-name">{data.data.description}</strong>
               </div>
-              <Value color={data.data.type}>R$ {data.data.value}</Value>
+              <Value color={data.data.type} data-test="registry-amount">R$ {data.data.value}</Value>
             </ListItemContainer>
           ))}
         </ul>
 
         <article>
           <strong>Saldo</strong>
-          <Value color={saldo >= 0 ? "in" : "out"}>R$ {saldo.toFixed(2)}</Value>
+          <Value color={saldo >= 0 ? "in" : "out"} data-test="total-amount">R$ {saldo.toFixed(2)}</Value>
         </article>
       </TransactionsContainer>
 
       <ButtonsContainer>
-        <button onClick={() => handleClick("in")}>
+        <button onClick={() => handleClick("in")} data-test="new-income">
           <AiOutlinePlusCircle />
           <p>Nova <br /> entrada</p>
         </button>
-        <button onClick={() => handleClick("out")}>
+        <button onClick={() => handleClick("out")} data-test="new-expense">
           <AiOutlineMinusCircle />
           <p>Nova <br />saída</p>
         </button>
