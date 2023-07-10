@@ -48,9 +48,9 @@ export default function HomePage() {
       setTransac(response.data);
       const valores = response.data.map((data) => {
         const value = parseFloat(data.data.value);
-        if (data.data.type === 'in') {
+        if (data.data.type === 'entrada') {
           return value;
-        } else if (data.data.type === 'out') {
+        } else if (data.data.type === 'saida') {
           return -value;
         }
         return 0;
@@ -102,7 +102,7 @@ export default function HomePage() {
 
         <article>
           <strong>Saldo</strong>
-          <Value color={saldo >= 0 ? "in" : "out"} data-test="total-amount">R$ {saldo.toFixed(2)}</Value>
+          <Value color={saldo >= 0 ? "entrada" : "saida"} data-test="total-amount">R$ {saldo.toFixed(2)}</Value>
         </article>
       </TransactionsContainer>
 
