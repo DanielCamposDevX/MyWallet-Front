@@ -48,6 +48,7 @@ export default function SignInPage() {
       localStorage.setItem("user", email);
       localStorage.setItem("passc", pass);
       localStorage.setItem("name", username);
+      localStorage.setItem("token", token);
       navigate("/home");
     } catch (error) {
       alert(error);

@@ -12,25 +12,6 @@ export default function TransactionsPage() {
   const { tipo } = useParams();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const storedPass = localStorage.getItem("passc");
-
-    if (storedUser && storedPass) {
-      const promise = axios.post(`${import.meta.env.VITE_API_URL}/signin`, {
-        email: storedUser,
-        password: storedPass,
-      });
-      promise
-        .then((response) => {
-          const token = response.data;
-          setRequest({ token });
-        })
-        .catch((error) => {
-          navigate("/")
-        });
-    }
-  }, []);
 
 
   function saveTransaction(event) {
@@ -45,10 +26,13 @@ export default function TransactionsPage() {
       description,
       type: tipo
     }
-    console.log(data);
+    console.log(config);
     const promisse = axios.post(`${import.meta.env.VITE_API_URL}/transactions`, data, config);
     promisse.then(() => { navigate("/home") });
-    promisse.catch((res) => { alert(res) });
+    promisse.catch((res) => {
+      console.log(promisse);
+      alert(res)
+    });
 
   }
 

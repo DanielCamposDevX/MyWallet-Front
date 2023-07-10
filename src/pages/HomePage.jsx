@@ -16,31 +16,19 @@ export default function HomePage() {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const storedPass = localStorage.getItem("passc");
-
     if (storedUser && storedPass) {
-      const promise = axios.post(`${import.meta.env.VITE_API_URL}/signin`, {
-        email: storedUser,
-        password: storedPass,
-      });
-      promise
-        .then((response) => {
-          const token = response.data;
-          setRequest({ token });
-        })
-        .catch(() => {
-          navigate("/")
-        });
     }
-    else{
+    else {
       navigate("/");
     }
   }, []);
 
-/// Transactions total calculate ///
+  /// Transactions total calculate ///
   useEffect(() => {
+    const storedToken = localStorage.getItem("token");
     const config = {
       headers: {
-        "authorization": `Bearer ${request.token}`
+        "authorization": `Bearer ${storedToken}`
       }
     }
     const response = axios.get(`${import.meta.env.VITE_API_URL}/transactions`, config)
@@ -62,20 +50,22 @@ export default function HomePage() {
 
   }, []);
 
-/// Logoff function ///
+  /// Logoff function ///
   function exit() {
+    const storedToken = localStorage.getItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("passc");
-    navigate("/");
     const config = {
       headers: {
-        "authorization": `Bearer ${request.token}`
+        "authorization": `Bearer ${storedToken}`
       }
     }
-    axios.post(`${import.meta.env.VITE_API_URL}/logoff`, {}, config)
+    const promise = axios.post(`${import.meta.env.VITE_API_URL}/logoff`, {},config)
+    promise.then((res) => { localStorage.removeItem("token"); navigate("/"); })
+    promise.catch((res) => console.log(res))
   }
 
-/// New transaction Function ///
+  /// New transaction Function ///
   function handleClick(tipo) {
     navigate(`/nova-transacao/${tipo}`);
   }
@@ -89,8 +79,8 @@ export default function HomePage() {
 
       <TransactionsContainer>
         <ul>
-          {transac && transac.map((data,index) => (
-            <ListItemContainer key = {index}>
+          {transac && transac.map((data, index) => (
+            <ListItemContainer key={index}>
               <div>
                 <span>{data.date}</span>
                 <strong data-test="registry-name">{data.data.description}</strong>
