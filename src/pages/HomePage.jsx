@@ -7,9 +7,35 @@ import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 
 export default function HomePage() {
-  const { request } = useContext(RequestContext);
+  const { setRequest, request } = useContext(RequestContext);
   const navigate = useNavigate();
   const [transac, setTransac] = useState([]);
+  const [saldo, setSaldo] = useState(0);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    const storedPass = localStorage.getItem("passc");
+
+    if (storedUser && storedPass) {
+      const promise = axios.post(`${import.meta.env.VITE_API_URL}/signin`, {
+        email: storedUser,
+        password: storedPass,
+      });
+      promise
+        .then((response) => {
+          const token = response.data;
+          setRequest({ token });
+        })
+        .catch(() => {
+          navigate("/")
+        });
+    }
+  }, []);
+
+  function handleClick(tipo) {
+    navigate(`/nova-transacao/${tipo}`);
+  }
+
 
   useEffect(() => {
     const config = {
@@ -18,9 +44,24 @@ export default function HomePage() {
       }
     }
     const response = axios.get(`${import.meta.env.VITE_API_URL}/transactions`, config)
-    response.then(() => { console.log(response) })
+    response.then((response) => {
+      setTransac(response.data);
+      const valores = response.data.map((data) => {
+        const value = parseFloat(data.data.value);
+        if (data.data.type === 'in') {
+          return value;
+        } else if (data.data.type === 'out') {
+          return -value;
+        }
+        return 0;
+      });
+      const total = valores.reduce((acc, curr) => acc + curr, 0);
+      setSaldo(total);
+    });
     response.catch(() => { alert(error) })
+
   }, []);
+
 
   function exit() {
     localStorage.removeItem("user");
@@ -31,7 +72,7 @@ export default function HomePage() {
         "authorization": `Bearer ${request.token}`
       }
     }
-    axios.post(`${import.meta.env.VITE_API_URL}/logoff`, {},config)
+    axios.post(`${import.meta.env.VITE_API_URL}/logoff`, {}, config)
   }
   return (
     <HomeContainer>
@@ -46,25 +87,25 @@ export default function HomePage() {
             <ListItemContainer>
               <div>
                 <span>{data.date}</span>
-                <strong>{data.description}</strong>
+                <strong>{data.data.description}</strong>
               </div>
-              <Value color={data.type}>{data.value}</Value>
+              <Value color={data.data.type}>R$ {data.data.value}</Value>
             </ListItemContainer>
           ))}
         </ul>
 
         <article>
           <strong>Saldo</strong>
-          <Value color={"positivo"}>2880,00</Value>
+          <Value color={saldo >= 0 ? "in" : "out"}>R$ {saldo.toFixed(2)}</Value>
         </article>
       </TransactionsContainer>
 
       <ButtonsContainer>
-        <button>
+        <button onClick={() => handleClick("in")}>
           <AiOutlinePlusCircle />
           <p>Nova <br /> entrada</p>
         </button>
-        <button>
+        <button onClick={() => handleClick("out")}>
           <AiOutlineMinusCircle />
           <p>Nova <br />saída</p>
         </button>

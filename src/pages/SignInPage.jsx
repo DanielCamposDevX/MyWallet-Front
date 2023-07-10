@@ -21,8 +21,9 @@ export default function SignInPage() {
         password: storedPass,
       });
       promise
-        .then((token) => {
-          setRequest({ email: storedUser, pass: storedPass, token });
+        .then((response) => { 
+          const token = response.data;
+          setRequest({ token });
           navigate("/home");
         })
         .catch((error) => {

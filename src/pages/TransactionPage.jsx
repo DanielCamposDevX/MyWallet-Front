@@ -1,27 +1,53 @@
-import { useState } from "react"
+import { useState, useContext, useEffect } from "react"
 import styled from "styled-components"
 import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { RequestContext } from "../context/RequestContext";
 
 
 export default function TransactionsPage() {
   const [value, setValue] = useState('');
   const [description, setDescription] = useState('');
-  const [type, setType] = useState(''); //// Arrumar um jeito de descobrir o tipo
-  const { request } = useContext(RequestContext);
+  const { request, setRequest } = useContext(RequestContext);
+  const { tipo } = useParams();
+  const navigate = useNavigate();
 
-  function saveTransaction() {
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    const storedPass = localStorage.getItem("passc");
+
+    if (storedUser && storedPass) {
+      const promise = axios.post(`${import.meta.env.VITE_API_URL}/signin`, {
+        email: storedUser,
+        password: storedPass,
+      });
+      promise
+        .then((response) => {
+          const token = response.data;
+          setRequest({ token });
+        })
+        .catch((error) => {
+          navigate("/")
+        });
+    }
+  }, []);
+
+
+  function saveTransaction(event) {
+    event.preventDefault();
     const config = {
       headers: {
         "Authorization": `Bearer ${request.token}`
-      },
-      body: {
-        value,
-        description,
-        type
       }
     };
-    const promisse = axios.post(`${import.meta.env.VITE_API_URL}/transactions`, config);
-    promisse.then({});//// Fazer algo ao postar
+    const data = {
+      value,
+      description,
+      type: tipo
+    }
+    console.log(data);
+    const promisse = axios.post(`${import.meta.env.VITE_API_URL}/transactions`, data, config);
+    promisse.then(() => { navigate("/home") });
     promisse.catch((res) => { alert(error) });
 
   }
@@ -29,10 +55,10 @@ export default function TransactionsPage() {
   return (
     <TransactionsContainer>
       <h1>Nova TRANSAÇÃO</h1>
-      <form>
-        <input placeholder="Valor" type="text" />
-        <input placeholder="Descrição" type="text" />
-        <button onClick={saveTransaction}>Salvar TRANSAÇÃO</button>
+      <form onSubmit={saveTransaction}>
+        <input placeholder="Valor" type="text" required value={value} onChange={(e) => setValue(e.target.value)} />
+        <input placeholder="Descrição" type="text" required value={description} onChange={(e) => setDescription(e.target.value)} />
+        <button type="submit">Salvar TRANSAÇÃO</button>
       </form>
     </TransactionsContainer>
   )
