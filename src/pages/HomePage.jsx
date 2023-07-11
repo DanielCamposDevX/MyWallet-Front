@@ -82,7 +82,7 @@ export default function HomePage() {
                 <span>{data.date}</span>
                 <strong data-test="registry-name">{data.data.description}</strong>
               </div>
-              <Value color={data.data.type} data-test="registry-amount">R$ {data.data.value.toFixed(2).replace(".", ",")}</Value>
+              <Value color={data.data.type} data-test="registry-amount">R$ {data.data.value.replace(".", ",")}</Value>
             </ListItemContainer>
           ))}
         </ul>
