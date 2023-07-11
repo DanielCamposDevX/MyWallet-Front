@@ -89,7 +89,7 @@ export default function HomePage() {
 
         <article>
           <strong>Saldo</strong>
-          <Value color={saldo >= 0 ? "entrada" : "saida"} data-test="total-amount">R$ {saldo.toFixed(2).replace(".", ",")}</Value>
+          <Value color={saldo >= 0 ? "entrada" : "saida"} data-test="total-amount">{saldo.toFixed(2).replace(".", ",")}</Value>
         </article>
       </TransactionsContainer>
 
