@@ -82,14 +82,14 @@ export default function HomePage() {
                 <span>{data.date}</span>
                 <strong data-test="registry-name">{data.data.description}</strong>
               </div>
-              <Value color={data.data.type} data-test="registry-amount">R$ {data.data.value.toLocaleString('pt-BR')}</Value>
+              <Value color={data.data.type} data-test="registry-amount">R$ {data.data.value.toFixed(2).replace(".", ",")}</Value>
             </ListItemContainer>
           ))}
         </ul>
 
         <article>
           <strong>Saldo</strong>
-          <Value color={saldo >= 0 ? "entrada" : "saida"} data-test="total-amount">R$ {saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
+          <Value color={saldo >= 0 ? "entrada" : "saida"} data-test="total-amount">R$ {saldo.toFixed(2).replace(".", ",")}</Value>
         </article>
       </TransactionsContainer>
 
