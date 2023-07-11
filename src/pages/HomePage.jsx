@@ -12,15 +12,12 @@ export default function HomePage() {
   const [transac, setTransac] = useState([]);
   const [saldo, setSaldo] = useState(0);
   const name = localStorage.getItem("name");
-  ///Verify login or login again///
+
+  ///Verify login ///
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const storedPass = localStorage.getItem("passc");
-    if (storedUser && storedPass) {
-    }
-    else {
-      navigate("/");
-    }
+    if (!storedUser || !storedPass) { navigate("/"); }
   }, []);
 
   /// Transactions total calculate ///
@@ -60,7 +57,7 @@ export default function HomePage() {
         "authorization": `Bearer ${storedToken}`
       }
     }
-    const promise = axios.post(`${import.meta.env.VITE_API_URL}/logoff`, {},config)
+    const promise = axios.post(`${import.meta.env.VITE_API_URL}/logoff`, {}, config)
     promise.then((res) => { localStorage.removeItem("token"); navigate("/"); })
     promise.catch((res) => console.log(res))
   }
@@ -85,14 +82,14 @@ export default function HomePage() {
                 <span>{data.date}</span>
                 <strong data-test="registry-name">{data.data.description}</strong>
               </div>
-              <Value color={data.data.type} data-test="registry-amount">R$ {data.data.value}</Value>
+              <Value color={data.data.type} data-test="registry-amount">R$ {data.data.value.toLocaleString('pt-BR')}</Value>
             </ListItemContainer>
           ))}
         </ul>
 
         <article>
           <strong>Saldo</strong>
-          <Value color={saldo >= 0 ? "entrada" : "saida"} data-test="total-amount">R$ {saldo.toFixed(2)}</Value>
+          <Value color={saldo >= 0 ? "entrada" : "saida"} data-test="total-amount">R$ {saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Value>
         </article>
       </TransactionsContainer>
 
