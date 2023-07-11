@@ -30,7 +30,8 @@ export default function HomePage() {
     }
     const response = axios.get(`${import.meta.env.VITE_API_URL}/transactions`, config)
     response.then((response) => {
-      setTransac(response.data);
+      const arr = response.data.reverse()
+      setTransac(arr);
       const valores = response.data.map((data) => {
         const value = parseFloat(data.data.value);
         if (data.data.type === 'entrada') {
